@@ -1,0 +1,42 @@
+name: Run Python and Commit JSON
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows you to run this manually from the GitHub Actions tab
+
+permissions:
+  contents: write # Crucial: Gives the workflow permission to commit changes
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Check out the repository code
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # 2. Set up Python environment
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    # 3. Run the Python script to generate data.json
+    - name: Run Python script
+      run: python generate_data.py
+
+    # 4. Commit and Push the changes back to GitHub
+    - name: Commit and Push JSON file
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        
+        git add data.json
+        
+        # Only commit if there are actual changes to prevent workflow errors
+        git diff-index --quiet HEAD || git commit -m "Automated update: data.json"
+        
+        git push
