@@ -1,0 +1,34 @@
+name: Run Python and Upload Artifact
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Check out the repository code
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # 2. Set up Python environment
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    # 3. Run the Python script to generate data.json
+    - name: Run Python script
+      run: python generate_data.py
+
+    # 4. Upload the JSON file as an artifact
+    - name: Upload JSON Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: python-generated-numbers  # The name of the downloadable zip file
+        path: data.json                 # The path to the file you want to save
+        retention-days: 50              # Optional: How long to keep the file (default is 90 days)
