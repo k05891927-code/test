@@ -1,7 +1,7 @@
 import json
 
 # Generate numbers 1 to 10
-data = {"numbers": list(range(1, 11))}
+data = {"numbers": list(range(1, 100))}
 
 # Save to a JSON file
 with open("data.json", "w") as f:
